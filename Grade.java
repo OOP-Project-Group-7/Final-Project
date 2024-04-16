@@ -6,7 +6,7 @@ public class Grade {
     public Grade(float score) {
         this.score = score;
         this.letterGrade = convertToLetter(score);
-        this.gradePoint = convertToGradePoint(score);
+        this.gradePoint = convertToGradePoint(letterGrade);
     }
 
     public float getScore() {
@@ -16,7 +16,7 @@ public class Grade {
     public void setScore(float score) {
         this.score = score;
         this.letterGrade = convertToLetter(score);
-        this.gradePoint = convertToGradePoint(score);
+        this.gradePoint = convertToGradePoint(letterGrade);
     }
 
     public String getLetterGrade() {
@@ -35,6 +35,7 @@ public class Grade {
         this.gradePoint = gradePoint;
     }
 
+    // Static method to convert a numerical score to a letter grade
     public static String convertToLetter(float score) {
         if (score >= 85) {
             return "A+";
@@ -57,26 +58,29 @@ public class Grade {
         }
     }
     
-
-    public static double convertToGradePoint(float score) {
-        if (score >= 85) {
-            return 4.00;
-        } else if (score >= 80) {
-            return 4.00;
-        } else if (score >= 75) {
-            return 3.50;
-        } else if (score >= 70) {
-            return 3.00;
-        } else if (score >= 65) {
-            return 2.50;
-        } else if (score >= 60) {
-            return 2.00;
-        } else if (score >= 55) {
-            return 1.50;
-        } else if (score >= 50) {
-            return 1.00;
-        } else {
-            return 0.00;
+    // Static method to convert a letter grade to a grade point value
+    public static double convertToGradePoint(String grade) {
+        double gradePoint = 0;
+        if (grade == "A+") {
+            gradePoint = 4.00;
+        } else if (grade == "A") {
+            gradePoint = 4.00;
+        } else if (grade == "B+") {
+            gradePoint = 3.50;
+        } else if (grade == "B") {
+            gradePoint = 3.00;
+        } else if (grade == "C+") {
+            gradePoint = 2.50;
+        } else if (grade == "C") {
+            gradePoint = 2.00;
+        } else if (grade == "D+") {
+            gradePoint = 1.50;
+        } else if (grade == "D") {
+            gradePoint = 1.00;
+        } else if (grade == "E") {
+            gradePoint = 0.00;
         }
+            return gradePoint;
+        
     }
 }

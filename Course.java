@@ -1,16 +1,17 @@
 public class Course {
     private String courseCode;
     private String courseName;
-    private int credits;
+    private double credits;
     private Instructor instructor;
     private Student[] enrolledStudents;
     private int numEnrolled;
     private static final int maxStudents = 30;
+
     // Store hard coded courses
-    public static Course[] courseList = new Course[10]; // Assuming max 10 courses
+    public static Course[] courseList = new Course[10]; // Set the Array size to 10
     private static int numCourses = 0;
 
-    public Course(String courseCode, String courseName, int credits, Instructor instructor) {
+    public Course(String courseCode, String courseName, double credits, Instructor instructor) {
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.credits = credits;
@@ -22,18 +23,27 @@ public class Course {
     }
 
     public static void initializePredefinedCourses() {
+        numCourses = 0; 
+    
+        // Get array of instructors
+        Instructor[] instructors = Instructor.initializePreinitializedInstructors();
+    
+        // Create array of courses
         Course[] predefinedCourses = {
-            new Course("CS101", "Introduction to Computer Science", 3, instructorObject1, maxStudents),
-            new Course("ENG101", "Introduction to English Literature", 3, instructorObject2, maxStudents),
-            // Add more predefined courses as needed
+            new Course("CS111", "Introduction to Computing ", 1, instructors[0]),
+            new Course("BUSA161", "FDE I", 1, instructors[1]),
+            new Course("MATH111", "Calculus I", 1, instructors[2]),
+            new Course("ENGL112", "Written and Oral Communication", 1, instructors[3]),
+            new Course("SOAN111", "Leadership 1", 0.5, instructors[4]),        
         };
-
-        for (Course course : predefinedCourses) {
-            courseList[numCourses++] = course;
+    
+        // Add these courses to the course list
+        for (int i=0; i<predefinedCourses.length; i++) {
+            courseList[i] = predefinedCourses[i];
         }
     }
 
-    // Static method to display available courses
+    // Method which displays available courses
     public static void displayAvailableCourses() {
         System.out.println("Available Courses:");
         for (int i = 0; i < numCourses; i++) {
@@ -57,7 +67,7 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public int getCredits() {
+    public double getCredits() {
         return credits;
     }
 
@@ -81,19 +91,20 @@ public class Course {
         return numEnrolled;
     }
 
+    // Enrolls a student in a course
     public void enrollStudent(Student student) {
         if (numEnrolled < maxStudents) {
             enrolledStudents[numEnrolled++] = student;
-            student.enrollCourse(this); // Enroll the student in this course
+            student.enrollCourse(this); 
         } else {
             System.out.println("Maximum students enrolled. Cannot enroll more students.");
         }
     }
 
+    // Removes a student from EnrolledStudents 
     public void dropStudent(Student student) {
         for (int i = 0; i < numEnrolled; i++) {
             if (enrolledStudents[i].equals(student)) {
-                // Remove the student and shift remaining students to the left
                 for (int j = i; j < numEnrolled - 1; j++) {
                     enrolledStudents[j] = enrolledStudents[j + 1];
                 }
@@ -107,16 +118,10 @@ public class Course {
     }
 
     public void recordGrade(Student student, Grade grade) {
-        // Assuming that the student is already enrolled in the course
         for (int i = 0; i < numEnrolled; i++) {
             if (enrolledStudents[i].equals(student)) {
-                // Record the grade for the student
-                // You might want to store it in a separate array or data structure
-                // For simplicity, let's print it for now
-                /* System.out.println("Grade recorded for student " + student.getFirstName() + " " + student.getLastName() +
-                        " in course " + name + ": " + grade.getLetterGrade()); */
-                System.out.println(student.getFirstName() + student.getLastName() + " scored" + grade.getLetterGrade() + 
-                        " in " + courseName);        
+                // Record the grade for the student    
+                System.out.println("Grade recorded for " + student.getFirstName() + " in " + courseName + ": " + grade.getLetterGrade());
                 return;
             }
         }
@@ -130,3 +135,5 @@ public class Course {
         }
     }
 }
+
+

@@ -3,7 +3,7 @@ public class Transcript {
     private Course[] courses;
     private String[] letterGrades;
     private double[] gradePoints;
-    private int numCourses;
+    protected int numCourses;
 
     public Transcript(Student student) {
         this.student = student;
@@ -34,37 +34,53 @@ public class Transcript {
     }
 
     public void addCourseGrade(Course course, float score) {
-        if (numCourses < courses.length && numCourses < letterGrades.length && numCourses < gradePoints.length) {
+        String letterGrade = Grade.convertToLetter(score);
+        if (numCourses < courses.length) {
             courses[numCourses] = course;
-            letterGrades[numCourses] = Grade.convertToLetter(score); // Assign letter grade to the array
-            gradePoints[numCourses] = Grade.convertToGradePoint(score);
+            letterGrades[numCourses] = Grade.convertToLetter(score);
+            gradePoints[numCourses] = Grade.convertToGradePoint(letterGrade);
             numCourses++;
         } else {
             System.out.println("Maximum courses reached in transcript. Cannot add more grades.");
         }
-    }  
+    }
     
+    
+    public String[] getFormattedGrades() {
+        String[] formattedGrades = new String[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            formattedGrades[i] = String.format("%s\t\t%s\t\t%.2f", 
+                                               courses[i].getCourseCode(), 
+                                               letterGrades[i], 
+                                               gradePoints[i]);
+        }
+        return formattedGrades;
+    }
 
     public double calculateGPA() {
         double totalCredits = 0;
         double totalGradePoints = 0;
+        String[] grades = student.grades;
 
-        for (int i = 0; i < numCourses; i++) {
-            totalCredits += courses[i].getCredits();
-            totalGradePoints += gradePoints[i] * courses[i].getCredits();
+
+        for (int i = 0; i < student.getNumCourses(); i++) {
+            totalCredits += student.getCoursesEnrolled()[i].getCredits();
+            double gradePoint = Grade.convertToGradePoint(grades[i]) ;
+            totalGradePoints += gradePoint;
         }
 
         // Calculate GPA
         double gpa = totalGradePoints / totalCredits;
 
         // Round GPA to two decimal places
-        gpa = Math.round(gpa * 100.0) / 100.0;
+        gpa = Math.round(gpa * 100.0) /100.0;
 
         return gpa;
     }
 
     public void displayTranscript() {
         System.out.println("Transcript for: " + student.getFirstName() + " " + student.getLastName());
+        System.out.println("----------------------------------------------------");
         System.out.println("Course\t\tGrade\t\tGrade Point");
 
         for (int i = 0; i < numCourses; i++) {
